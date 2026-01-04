@@ -1,0 +1,41 @@
+import sys
+
+def check_couplet(line1, line2):
+    bad = []
+
+    # A. 二四不同二六同（每一句都要符合）
+    def rule_A(line):
+        return (line[1] != line[3]) and (line[1] == line[5])
+
+    if (not rule_A(line1)) or (not rule_A(line2)):
+        bad.append("A")
+
+    # B. 仄起平收
+    # 第一句第七字要仄(1)，第二句第七字要平(0)
+    if not (line1[6] == 1 and line2[6] == 0):
+        bad.append("B")
+
+    # C. 同聯相對：第2/4/6字要相反
+    # 相反等同於 a XOR b == 1 (因為只有0/1)
+    for idx in (1, 3, 5):  # 0-based: 第2,4,6
+        if (line1[idx] ^ line2[idx]) != 1:
+            bad.append("C")
+            break
+
+    return "None" if not bad else "".join(bad)
+
+def main():
+    data = sys.stdin.read().strip().split()
+    if not data:
+        return
+    n = int(data[0])
+    p = 1
+    out = []
+    for _ in range(n):
+        line1 = list(map(int, data[p:p+7])); p += 7
+        line2 = list(map(int, data[p:p+7])); p += 7
+        out.append(check_couplet(line1, line2))
+    print("\n".join(out))
+
+if __name__ == "__main__":
+    main()
