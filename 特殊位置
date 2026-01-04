@@ -1,0 +1,35 @@
+import sys
+
+data = list(map(int, sys.stdin.read().split()))
+p = 0
+
+n = data[p]; m = data[p+1]; p += 2
+
+A = []
+for _ in range(n):
+    A.append(data[p:p+m])
+    p += m
+
+ans = []
+
+for i in range(n):
+    for j in range(m):
+        x = A[i][j]
+        s = 0
+
+        for dy in range(-x, x + 1):
+            r = x - abs(dy)
+            ni = i + dy
+            if ni < 0 or ni >= n:
+                continue
+            for dx in range(-r, r + 1):
+                nj = j + dx
+                if 0 <= nj < m:
+                    s += A[ni][nj]
+
+        if (s % 10) == (x % 10):
+            ans.append((i, j))
+
+print(len(ans))
+for i, j in ans:
+    print(i, j)
