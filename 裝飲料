@@ -1,0 +1,43 @@
+import sys
+
+data = list(map(int, sys.stdin.read().split()))
+idx = 0
+
+N = data[idx]
+idx += 1
+
+w1, w2, h1, h2 = data[idx:idx+4]
+idx += 4
+
+waters = data[idx:idx+N]
+
+A1 = w1 * w1
+A2 = w2 * w2
+V1 = A1 * h1
+V2 = A2 * h2
+Vtotal = V1 + V2
+
+cur_volume = 0
+cur_height = 0
+max_rise = 0
+
+for v in waters:
+    if cur_volume == Vtotal:
+        rise = 0
+    else:
+        add = min(v, Vtotal - cur_volume)
+        new_volume = cur_volume + add
+
+        if new_volume <= V1:
+            new_height = new_volume // A1
+        else:
+            new_height = h1 + (new_volume - V1) // A2
+
+        rise = new_height - cur_height
+        cur_volume = new_volume
+        cur_height = new_height
+
+    if rise > max_rise:
+        max_rise = rise
+
+print(max_rise)
