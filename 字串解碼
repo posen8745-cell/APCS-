@@ -1,0 +1,45 @@
+import sys
+from collections import deque
+
+def unswap_halves(s):
+    n = len(s)
+    mid = n // 2
+    if n % 2 == 0:
+        # s = second + first  (正向 swap)
+        # 反向再 swap 一次即可
+        first = s[:mid]
+        second = s[mid:]
+        return second + first
+    else:
+        first = s[:mid]
+        middle = s[mid]
+        second = s[mid+1:]
+        return second + middle + first
+
+def inverse_f(t, e):
+    # 先反推第 2 步：由 t 和 e 重建 swap 後的 s（記為 s1）
+    dq = deque()
+    for i in range(len(e) - 1, -1, -1):
+        ch = t[i]
+        if e[i] == '0':
+            dq.appendleft(ch)
+        else:
+            dq.append(ch)
+    s1 = ''.join(dq)
+
+    # 再反推第 1 步：若 1 的個數為奇數，swap 一次回去
+    if e.count('1') % 2 == 1:
+        return unswap_halves(s1)
+    return s1
+
+data = sys.stdin.read().split()
+m = int(data[0])
+n = int(data[1])
+
+es = data[2:2+m]
+cur = data[2+m]  # 收到的 sm
+
+for j in range(m - 1, -1, -1):
+    cur = inverse_f(cur, es[j])
+
+print(cur)
