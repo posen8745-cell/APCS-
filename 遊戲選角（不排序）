@@ -1,0 +1,29 @@
+import sys
+
+data = list(map(int, sys.stdin.read().split()))
+n = data[0]
+
+idx = 1
+max1 = -1
+max2 = -1
+ans1 = ans2 = (0, 0)
+
+for _ in range(n):
+    a = data[idx]
+    d = data[idx + 1]
+    idx += 2
+
+    score = a*a + d*d
+
+    if score > max1:
+        max2 = max1
+        ans2 = ans1
+
+        max1 = score
+        ans1 = (a, d)
+
+    elif score > max2:
+        max2 = score
+        ans2 = (a, d)
+
+print(ans2[0], ans2[1])
