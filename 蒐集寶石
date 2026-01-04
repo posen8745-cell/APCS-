@@ -1,0 +1,46 @@
+import sys
+
+data = list(map(int, sys.stdin.read().split()))
+p = 0
+
+M, N, K, r, c = data[p:p+5]
+p += 5
+
+grid = []
+for _ in range(M):
+    grid.append(data[p:p+N])
+    p += N
+
+# 方向：東、南、西、北
+dr = [0, 1, 0, -1]
+dc = [1, 0, -1, 0]
+d = 0  # 起始面向東
+
+score = 0
+gems = 0
+
+def in_range(x, y):
+    return 0 <= x < M and 0 <= y < N
+
+while True:
+    if grid[r][c] == 0:
+        break
+
+    score += grid[r][c]
+    grid[r][c] -= 1
+    gems += 1
+
+    if score % K == 0:
+        d = (d + 1) % 4  # 右轉一次
+
+    # 找到可走的前方（非牆、且不出界）
+    while True:
+        nr = r + dr[d]
+        nc = c + dc[d]
+        if in_range(nr, nc) and grid[nr][nc] != -1:
+            break
+        d = (d + 1) % 4  # 右轉直到可走
+
+    r, c = nr, nc
+
+print(gems)
