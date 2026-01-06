@@ -1,0 +1,43 @@
+# APCS 2級寫法：七言對聯平仄檢查
+
+n = int(input())
+
+for _ in range(n):
+    a = list(map(int, input().split()))  # 第一句
+    b = list(map(int, input().split()))  # 第二句
+
+    badA = False
+    badB = False
+    badC = False
+
+    # 規則 A：每句都要檢查
+    # 二四不同：第2字(1) != 第4字(3)
+    # 二六同：  第2字(1) == 第6字(5)
+    if not (a[1] != a[3] and a[1] == a[5]):
+        badA = True
+    if not (b[1] != b[3] and b[1] == b[5]):
+        badA = True
+
+    # 規則 B：仄起平收
+    if not (a[6] == 1 and b[6] == 0):
+        badB = True
+
+    # 規則 C：同聯相對（2,4,6 字要相反）
+    # 相反等價於：兩個值不一樣（或 a[i] + b[i] == 1）
+    for i in [1, 3, 5]:
+        if a[i] == b[i]:
+            badC = True
+            break
+
+    ans = ""
+    if badA:
+        ans += "A"
+    if badB:
+        ans += "B"
+    if badC:
+        ans += "C"
+
+    if ans == "":
+        print("None")
+    else:
+        print(ans)
